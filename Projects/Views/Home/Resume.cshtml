@@ -1,0 +1,107 @@
+﻿<link href="~/Content/Resume.css" rel="stylesheet" />
+
+@model Tuple<List<Projects.Models.EducationModel>, List<Projects.Models.JobModel>>
+
+@{
+    ViewBag.Title = "Resume";
+    var previousCompany = "";
+    int j = 0;
+    int count = 1;
+    IEnumerable<Projects.Models.JobModel> jobs = new List<Projects.Models.JobModel>();
+}
+<h2>@ViewBag.Title</h2>
+
+@{ 
+    if(Model.Item1.Count() > 0)
+    {
+        <div class="section">
+            <h4>Education</h4>
+            @foreach(var edu in Model.Item1)
+             {
+                <div class="left">
+                    <p><strong>@edu.NameValue</strong> | @edu.CityValue, @edu.StateValue</p>
+                    <p>@edu.DegreeValue</p>
+                    <p>Major: @edu.MajorValue</p>
+                </div>
+                <div class="right">
+                    @{ 
+                        if(edu.GetGraduated())
+                        {
+                            <p>Graduated: @edu.GetDate()</p>
+                        } else
+                    {
+                        <p>Currently Attending</p>
+                    }
+                    }
+                    <p>GPA: @edu.GPAValue</p>
+                </div>
+             }
+        </div>
+    }
+}
+    @{
+        if (Model.Item2.Count() > 0)
+        {
+        <div class="section">
+            <h4>Work Experience</h4>
+            @{
+                for (int i = 0; i < Model.Item2.Count(); i++)
+                {
+
+                    bool end = false;
+                    count = 1;
+                    if (previousCompany != Model.Item2[i].GetCompany())
+                    {
+                        j = i + 1;
+                        while (!end)
+                        {
+                            if (j >= Model.Item2.Count() || Model.Item2[i].GetCompany() != Model.Item2[j].GetCompany())
+                            {
+                                end = true;
+                            }
+                            else
+                            {
+                                count++;
+                                j++;
+                            }
+                        }
+
+                        if (count > 1)
+                        {
+                            jobs = Model.Item2.Select(x => x).Where(x => x.GetCompany() == Model.Item2[i].GetCompany());
+
+                        }
+                    }
+
+                    if (previousCompany != Model.Item2[i].GetCompany())
+                    {
+                        <div class="companyInfo">
+                            <p class="left"><strong>@Model.Item2[i].GetCompany()</strong> | @Model.Item2[i].CityValue, @Model.Item2[i].StateValue</p>
+                            <p class="right">@(count <= 1 ? Model.Item2[i].GetDate() : jobs.Last().GetDate()) - @Model.Item2[i].GetDate(true)</p>
+                        </div>
+                    }
+
+                    <div class="jobTitle">
+                        <p class="left"><strong>@Model.Item2[i].GetJobTitle()</strong></p>
+                        @{
+                            if (count > 1 || previousCompany == Model.Item2[i].GetCompany())
+                            {
+                                <p class="right">@Model.Item2[i].GetDate() - @Model.Item2[i].GetDate(true)</p>
+                            }
+                        }
+                    </div>
+                    if (Model.Item2[i].GetJobDescription() != null)
+                    {
+                        <ul>
+                            @foreach (var desc in Model.Item2[i].GetJobDescription())
+                             {
+                                <li>@desc</li>
+                             }
+                        </ul>
+                    }
+                    previousCompany = Model.Item2[i].GetCompany();
+                }
+            }
+        </div>
+        }
+    }
