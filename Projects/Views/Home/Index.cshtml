@@ -1,5 +1,58 @@
-﻿@{
-    ViewBag.Title = "Portfolio";
+﻿@model List<Projects.Models.ProjectModel>
+@{
+    ViewBag.Title = "Projects";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<h2>@ViewBag.Title</h2>
+
+
+@{
+    if (Model != null && Model.Count > 0)
+    {
+        <div id="projects">
+            @foreach (var proj in Model)
+            {
+                string textClass = "detailsOnly";
+                <div class="projectBox">
+                    <h3>@Html.DisplayFor(modelItem => proj.TitleValue)</h3>
+                    @if (proj.HasVideoValue)
+                    {
+                        textClass = "detailsText";
+                    }
+                    <div class="projectDetails @textClass">
+                        <p>@Html.DisplayFor(modelItem => proj.DescriptionValue)</p>
+                        @{
+                            var urls = proj.GetUrls();
+                            if (urls != null && urls.Count() > 0)
+                            {
+                                <div class="outsideSite">
+                                    @foreach (var kvp in urls)
+                                    {
+                                        var target = (!kvp.Key.ToLower().Contains(".net mvc") ? "target=\"_blank\"" : "");
+                                        <a href="@kvp.Value" @target>
+                                            @if (kvp.Key.ToLower() == "youtube")
+                                            {
+                                                <i class="fab fa-youtube"></i>
+                                            }
+                                            else if (kvp.Key.ToLower() == "github")
+                                            {
+                                                <i class="fab fa-github"></i>
+                                            }
+                                            else if (kvp.Key.ToLower().Contains(".net mvc"))
+                                            {
+                                                <i class="fab fa-windows"></i>
+                                            }
+                                        </a>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <h3>@ViewBag.Message</h3>
+    }
+}

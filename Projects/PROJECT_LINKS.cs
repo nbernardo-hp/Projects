@@ -12,16 +12,13 @@ namespace Projects
     using System;
     using System.Collections.Generic;
     
-    public partial class MAJOR
+    public partial class PROJECT_LINKS
     {
         public int Id { get; set; }
-        public int SchoolId { get; set; }
-        public string Major1 { get; set; }
-        public Nullable<decimal> GPA { get; set; }
-        public string Graduated { get; set; }
-        public Nullable<System.DateTime> Graduation_Date { get; set; }
-        public string Degree { get; set; }
+        public int ProjectId { get; set; }
+        public string Url { get; set; }
+        public string Website { get; set; }
     
-        public virtual SCHOOL SCHOOL { get; set; }
+        public virtual PROJECT PROJECT { get; set; }
     }
 }
