@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="StocksModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Preferences">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockPreferences">
+          <Key>
+            <PropertyRef Name="Stock" />
+            <PropertyRef Name="Preference" />
+          </Key>
+          <Property Name="Stock" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="Preference" Type="int" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="17" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Stocks">
+          <Key>
+            <PropertyRef Name="Symbol" />
+          </Key>
+          <Property Name="Symbol" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FinvizRank" Type="int" />
+          <Property Name="IndividualRating" Type="float" Nullable="false" />
+          <Property Name="Type" Type="char" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="SubPreferences">
+          <Key>
+            <PropertyRef Name="Preference" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Preference" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="17" Nullable="false" />
+          <Property Name="Value" Type="float" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Pref">
+          <End Role="Preferences" Type="Self.Preferences" Multiplicity="1" />
+          <End Role="SubPreferences" Type="Self.SubPreferences" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Preferences">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubPreferences">
+              <PropertyRef Name="Preference" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockPref">
+          <End Role="Preferences" Type="Self.Preferences" Multiplicity="1" />
+          <End Role="StockPreferences" Type="Self.StockPreferences" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Preferences">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StockPreferences">
+              <PropertyRef Name="Preference" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Symbol">
+          <End Role="Stocks" Type="Self.Stocks" Multiplicity="1" />
+          <End Role="StockPreferences" Type="Self.StockPreferences" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stocks">
+              <PropertyRef Name="Symbol" />
+            </Principal>
+            <Dependent Role="StockPreferences">
+              <PropertyRef Name="Stock" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="StocksModelStoreContainer">
+          <EntitySet Name="Preferences" EntityType="Self.Preferences" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockPreferences" EntityType="Self.StockPreferences" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stocks" EntityType="Self.Stocks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubPreferences" EntityType="Self.SubPreferences" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Pref" Association="Self.FK_Pref">
+            <End Role="Preferences" EntitySet="Preferences" />
+            <End Role="SubPreferences" EntitySet="SubPreferences" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockPref" Association="Self.FK_StockPref">
+            <End Role="Preferences" EntitySet="Preferences" />
+            <End Role="StockPreferences" EntitySet="StockPreferences" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Symbol" Association="Self.FK_Symbol">
+            <End Role="Stocks" EntitySet="Stocks" />
+            <End Role="StockPreferences" EntitySet="StockPreferences" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="StocksModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Preference">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="SubPreferences" Relationship="Self.FK_Pref" FromRole="Preferences" ToRole="SubPreferences" />
+          <NavigationProperty Name="StockPreferences" Relationship="Self.FK_StockPref" FromRole="Preferences" ToRole="StockPreferences" />
+        </EntityType>
+        <EntityType Name="StockPreference">
+          <Key>
+            <PropertyRef Name="Stock" />
+            <PropertyRef Name="Preference" />
+          </Key>
+          <Property Name="Stock" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Preference" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="17" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Preference1" Relationship="Self.FK_StockPref" FromRole="StockPreferences" ToRole="Preferences" />
+          <NavigationProperty Name="Stock1" Relationship="Self.FK_Symbol" FromRole="StockPreferences" ToRole="Stocks" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="Symbol" />
+          </Key>
+          <Property Name="Symbol" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FinvizRank" Type="Int32" />
+          <Property Name="IndividualRating" Type="Double" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="StockPreferences" Relationship="Self.FK_Symbol" FromRole="Stocks" ToRole="StockPreferences" />
+        </EntityType>
+        <EntityType Name="SubPreference">
+          <Key>
+            <PropertyRef Name="Preference" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Preference" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="17" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Preference1" Relationship="Self.FK_Pref" FromRole="SubPreferences" ToRole="Preferences" />
+        </EntityType>
+        <Association Name="FK_Pref">
+          <End Role="Preferences" Type="Self.Preference" Multiplicity="1" />
+          <End Role="SubPreferences" Type="Self.SubPreference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Preferences">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SubPreferences">
+              <PropertyRef Name="Preference" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockPref">
+          <End Role="Preferences" Type="Self.Preference" Multiplicity="1" />
+          <End Role="StockPreferences" Type="Self.StockPreference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Preferences">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StockPreferences">
+              <PropertyRef Name="Preference" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Symbol">
+          <End Role="Stocks" Type="Self.Stock" Multiplicity="1" />
+          <End Role="StockPreferences" Type="Self.StockPreference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stocks">
+              <PropertyRef Name="Symbol" />
+            </Principal>
+            <Dependent Role="StockPreferences">
+              <PropertyRef Name="Stock" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="StocksEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Preferences" EntityType="Self.Preference" />
+          <EntitySet Name="StockPreferences" EntityType="Self.StockPreference" />
+          <EntitySet Name="Stocks" EntityType="Self.Stock" />
+          <EntitySet Name="SubPreferences" EntityType="Self.SubPreference" />
+          <AssociationSet Name="FK_Pref" Association="Self.FK_Pref">
+            <End Role="Preferences" EntitySet="Preferences" />
+            <End Role="SubPreferences" EntitySet="SubPreferences" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockPref" Association="Self.FK_StockPref">
+            <End Role="Preferences" EntitySet="Preferences" />
+            <End Role="StockPreferences" EntitySet="StockPreferences" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Symbol" Association="Self.FK_Symbol">
+            <End Role="Stocks" EntitySet="Stocks" />
+            <End Role="StockPreferences" EntitySet="StockPreferences" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="StocksModelStoreContainer" CdmEntityContainer="StocksEntities">
+          <EntitySetMapping Name="Preferences">
+            <EntityTypeMapping TypeName="StocksModel.Preference">
+              <MappingFragment StoreEntitySet="Preferences">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockPreferences">
+            <EntityTypeMapping TypeName="StocksModel.StockPreference">
+              <MappingFragment StoreEntitySet="StockPreferences">
+                <ScalarProperty Name="Stock" ColumnName="Stock" />
+                <ScalarProperty Name="Preference" ColumnName="Preference" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stocks">
+            <EntityTypeMapping TypeName="StocksModel.Stock">
+              <MappingFragment StoreEntitySet="Stocks">
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FinvizRank" ColumnName="FinvizRank" />
+                <ScalarProperty Name="IndividualRating" ColumnName="IndividualRating" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubPreferences">
+            <EntityTypeMapping TypeName="StocksModel.SubPreference">
+              <MappingFragment StoreEntitySet="SubPreferences">
+                <ScalarProperty Name="Preference" ColumnName="Preference" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

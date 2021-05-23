@@ -1,0 +1,73 @@
+﻿@model Dictionary<string, List<Projects.Models.StockModel>>
+@{
+    ViewBag.Title = "TopDownAnalysis";
+}
+
+<h2>TopDownAnalysis</h2>
+
+@{
+    if (Model != null)
+    {
+        foreach (var type in Model.Keys)
+        {
+            int index = 0;
+            <h3>@(type.ToUpper().Trim() == "M" ? "Markets" : "Sectors")</h3>
+            <h3>Overall Rating: @(type.ToUpper().Trim() == "M" ? "M-Rating" : "S-Rating")</h3>
+            <table>
+                @foreach (var stock in Model[type])
+                {
+                    <tr>
+                        <th>@stock.SymbolValue</th>
+                        <th>@stock.NameValue</th>
+                    </tr>
+                    <tr>
+                        <th>20 &amp; 50 SMAs</th>
+                        <th>50 SMA</th>
+                        <th>20 SMA</th>
+                        @if (type.ToUpper().Trim() == "S")
+                        {
+                            <th>Finviz Rank</th>
+                        }
+                        <th>Chart Pattern</th>
+                        <th>Unexpected Items</th>
+                        <th>Individual Rating</th>
+                    </tr>
+                    <tr id="@stock.SymbolValue">
+                        <td>
+                            @Html.DropDownList(String.Format("{0}_sma200", stock.SymbolValue.ToLower()), new SelectList(Portfolio.Models.PreferencesModel.GetDropDownItems("sma200"), "Key", "Value", stock.SMA200Value))
+                        </td>
+                        <td>
+                            @Html.DropDownList(String.Format("{0}_sma50", stock.SymbolValue.ToLower()), new SelectList(Portfolio.Models.PreferencesModel.GetDropDownItems("sma5020"), "Key", "Value", stock.SMA50Value))
+                        </td>
+                        <td>
+                            @Html.DropDownList(String.Format("{0}_sma20", stock.SymbolValue.ToLower()), new SelectList(Portfolio.Models.PreferencesModel.GetDropDownItems("sma5020"), "Key", "Value", stock.SMA20Value))
+                        </td>
+                        @if (type.ToUpper().Trim() == "S")
+                        {
+                            <td>
+                                <select>
+                                    @for (int i = 1; i <= 12; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </td>
+                        }
+                        <td>
+                        </td>
+                        <td>
+                            @Html.DropDownList(String.Format("{0}_shartPattern", stock.SymbolValue.ToLower()), new SelectList(Portfolio.Models.PreferencesModel.GetDropDownItems("chartPattern"), "Key", "Value", stock.ChartPatternValue))
+                        </td>
+                        <td>
+                            @Html.DropDownList(String.Format("{0}_unexpectedItems", stock.SymbolValue.ToLower()), new SelectList(Portfolio.Models.PreferencesModel.GetDropDownItems("unexpectedItems"), "Key", "Value", stock.UnexpectedItemsValue))
+                        </td>
+                        <td>
+                            @stock.IndividualRatingValue
+                        </td>
+                    </tr>
+                    index++;
+                }
+            </table>
+        }
+    }
+}
