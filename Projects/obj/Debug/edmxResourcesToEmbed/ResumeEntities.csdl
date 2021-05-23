@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PortfolioModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="COMPANY">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="State" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="JOBs" Relationship="Self.FK_CompanyIdJob" FromRole="COMPANY" ToRole="JOB" />
+  </EntityType>
+  <EntityType Name="JOB">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CompanyId" Type="Int32" Nullable="false" />
+    <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="COMPANY" Relationship="Self.FK_CompanyIdJob" FromRole="JOB" ToRole="COMPANY" />
+    <NavigationProperty Name="JOB_DATES" Relationship="Self.FK_JobIdDates" FromRole="JOB" ToRole="JOB_DATES" />
+    <NavigationProperty Name="JOB_DESC" Relationship="Self.FK_JobIdDesc" FromRole="JOB" ToRole="JOB_DESC" />
+  </EntityType>
+  <EntityType Name="JOB_DATES">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="JobId" Type="Int32" Nullable="false" />
+    <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="EndDate" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="JOB" Relationship="Self.FK_JobIdDates" FromRole="JOB_DATES" ToRole="JOB" />
+  </EntityType>
+  <EntityType Name="JOB_DESC">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="JobId" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="JOB" Relationship="Self.FK_JobIdDesc" FromRole="JOB_DESC" ToRole="JOB" />
+  </EntityType>
+  <EntityType Name="MAJOR">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SchoolId" Type="Int32" Nullable="false" />
+    <Property Name="Major1" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="GPA" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Graduated" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Graduated_Date" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="SCHOOL" Relationship="Self.FK_School" FromRole="MAJOR" ToRole="SCHOOL" />
+  </EntityType>
+  <EntityType Name="SCHOOL">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="State" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="MAJORs" Relationship="Self.FK_School" FromRole="SCHOOL" ToRole="MAJOR" />
+  </EntityType>
+  <Association Name="FK_CompanyIdJob">
+    <End Role="COMPANY" Type="Self.COMPANY" Multiplicity="1" />
+    <End Role="JOB" Type="Self.JOB" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="COMPANY">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="JOB">
+        <PropertyRef Name="CompanyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JobIdDates">
+    <End Role="JOB" Type="Self.JOB" Multiplicity="1" />
+    <End Role="JOB_DATES" Type="Self.JOB_DATES" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JOB">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="JOB_DATES">
+        <PropertyRef Name="JobId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_JobIdDesc">
+    <End Role="JOB" Type="Self.JOB" Multiplicity="1" />
+    <End Role="JOB_DESC" Type="Self.JOB_DESC" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JOB">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="JOB_DESC">
+        <PropertyRef Name="JobId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_School">
+    <End Role="SCHOOL" Type="Self.SCHOOL" Multiplicity="1" />
+    <End Role="MAJOR" Type="Self.MAJOR" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SCHOOL">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MAJOR">
+        <PropertyRef Name="SchoolId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PortfolioEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="COMPANies" EntityType="Self.COMPANY" />
+    <EntitySet Name="JOBs" EntityType="Self.JOB" />
+    <EntitySet Name="JOB_DATES" EntityType="Self.JOB_DATES" />
+    <EntitySet Name="JOB_DESC" EntityType="Self.JOB_DESC" />
+    <EntitySet Name="MAJORs" EntityType="Self.MAJOR" />
+    <EntitySet Name="SCHOOLs" EntityType="Self.SCHOOL" />
+    <AssociationSet Name="FK_CompanyIdJob" Association="Self.FK_CompanyIdJob">
+      <End Role="COMPANY" EntitySet="COMPANies" />
+      <End Role="JOB" EntitySet="JOBs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JobIdDates" Association="Self.FK_JobIdDates">
+      <End Role="JOB" EntitySet="JOBs" />
+      <End Role="JOB_DATES" EntitySet="JOB_DATES" />
+    </AssociationSet>
+    <AssociationSet Name="FK_JobIdDesc" Association="Self.FK_JobIdDesc">
+      <End Role="JOB" EntitySet="JOBs" />
+      <End Role="JOB_DESC" EntitySet="JOB_DESC" />
+    </AssociationSet>
+    <AssociationSet Name="FK_School" Association="Self.FK_School">
+      <End Role="SCHOOL" EntitySet="SCHOOLs" />
+      <End Role="MAJOR" EntitySet="MAJORs" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

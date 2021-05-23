@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PortfolioModelStoreContainer" CdmEntityContainer="PortfolioEntities">
+    <EntitySetMapping Name="COMPANies">
+      <EntityTypeMapping TypeName="PortfolioModel.COMPANY">
+        <MappingFragment StoreEntitySet="COMPANY">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State" ColumnName="State" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JOBs">
+      <EntityTypeMapping TypeName="PortfolioModel.JOB">
+        <MappingFragment StoreEntitySet="JOB">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JOB_DATES">
+      <EntityTypeMapping TypeName="PortfolioModel.JOB_DATES">
+        <MappingFragment StoreEntitySet="JOB_DATES">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="JobId" ColumnName="JobId" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JOB_DESC">
+      <EntityTypeMapping TypeName="PortfolioModel.JOB_DESC">
+        <MappingFragment StoreEntitySet="JOB_DESC">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="JobId" ColumnName="JobId" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MAJORs">
+      <EntityTypeMapping TypeName="PortfolioModel.MAJOR">
+        <MappingFragment StoreEntitySet="MAJOR">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="SchoolId" ColumnName="SchoolId" />
+          <ScalarProperty Name="Major1" ColumnName="Major" />
+          <ScalarProperty Name="GPA" ColumnName="GPA" />
+          <ScalarProperty Name="Graduated" ColumnName="Graduated" />
+          <ScalarProperty Name="Graduated_Date" ColumnName="Graduated_Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SCHOOLs">
+      <EntityTypeMapping TypeName="PortfolioModel.SCHOOL">
+        <MappingFragment StoreEntitySet="SCHOOL">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State" ColumnName="State" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
