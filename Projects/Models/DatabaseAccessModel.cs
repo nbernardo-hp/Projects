@@ -39,9 +39,23 @@ namespace Projects.Models
                     {
                         entity = "PortfolioEntities";
                         cmdText = "SELECT P.Id, P.Name, P.Description, L.Url, L.Website FROM PROJECTS P, PROJECT_LINKS L WHERE P.Id = L.ProjectId";
+                    } else if(table.Contains("pref"))
+                    {
+                        entity = "StocksEntities";
+                        cmdText = "SELECT P.Name AS Preference, S.Name, S.Value FROM Preferences P, SubPreferences S WHERE P.Id = S.Preference";
                     } else
                     {
                         throw new Exception("no_table");
+                    }
+                } else if(table[0] == 's')
+                {
+                    entity = "StocksEntities";
+                    if(!table.Contains("pref"))
+                    {
+                        cmdText = "SELECT * FROM STOCKS";
+                    } else
+                    {
+                        cmdText = "SELECT S.Symbol, MIN(CASE WHEN P.Name = 'sma200' then Value END) AS sma200, MIN(CASE WHEN P.Name = 'sma50' then Value END) AS sma50, MIN(CASE WHEN P.Name = 'sma20' then Value END) AS sma20, MIN(CASE WHEN P.Name = 'chartPattern' then Value END) AS chartPattern,MIN(CASE WHEN P.Name = 'unexpectedItems' then Value END) AS unexpectedItems FROM Stocks S, Preferences P, StockPreferences SP WHERE SP.Preference = P.Id AND S.Symbol = SP.Stock GROUP BY S.Symbol";
                     }
                 } else
                 {
