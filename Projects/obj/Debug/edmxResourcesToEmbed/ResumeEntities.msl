@@ -42,12 +42,13 @@
     <EntitySetMapping Name="MAJORs">
       <EntityTypeMapping TypeName="PortfolioModel.MAJOR">
         <MappingFragment StoreEntitySet="MAJOR">
+          <ScalarProperty Name="Degree" ColumnName="Degree" />
+          <ScalarProperty Name="Graduation_Date" ColumnName="Graduation_Date" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="SchoolId" ColumnName="SchoolId" />
           <ScalarProperty Name="Major1" ColumnName="Major" />
           <ScalarProperty Name="GPA" ColumnName="GPA" />
           <ScalarProperty Name="Graduated" ColumnName="Graduated" />
-          <ScalarProperty Name="Graduated_Date" ColumnName="Graduated_Date" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -58,6 +59,25 @@
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="City" ColumnName="City" />
           <ScalarProperty Name="State" ColumnName="State" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PROJECT_LINKS">
+      <EntityTypeMapping TypeName="PortfolioModel.PROJECT_LINKS">
+        <MappingFragment StoreEntitySet="PROJECT_LINKS">
+          <ScalarProperty Name="Website" ColumnName="Website" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PROJECTS">
+      <EntityTypeMapping TypeName="PortfolioModel.PROJECT">
+        <MappingFragment StoreEntitySet="PROJECTS">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

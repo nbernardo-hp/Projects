@@ -31,5 +31,7 @@ namespace Projects
         public virtual DbSet<JOB_DESC> JOB_DESC { get; set; }
         public virtual DbSet<MAJOR> MAJORs { get; set; }
         public virtual DbSet<SCHOOL> SCHOOLs { get; set; }
+        public virtual DbSet<PROJECT_LINKS> PROJECT_LINKS { get; set; }
+        public virtual DbSet<PROJECT> PROJECTS { get; set; }
     }
 }

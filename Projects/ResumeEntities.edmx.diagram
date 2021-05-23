@@ -15,6 +15,9 @@
         <AssociationConnector Association="PortfolioModel.FK_JobIdDates" ManuallyRouted="false" />
         <AssociationConnector Association="PortfolioModel.FK_JobIdDesc" ManuallyRouted="false" />
         <AssociationConnector Association="PortfolioModel.FK_School" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="PortfolioModel.PROJECT_LINKS" Width="1.5" PointX="7.625" PointY="6.875" />
+        <EntityTypeShape EntityType="PortfolioModel.PROJECT" Width="1.5" PointX="5.375" PointY="7" />
+        <AssociationConnector Association="PortfolioModel.FK_LINKS" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

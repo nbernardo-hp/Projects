@@ -41,9 +41,27 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="SchoolId" Type="int" Nullable="false" />
     <Property Name="Major" Type="varchar" MaxLength="150" Nullable="false" />
-    <Property Name="GPA" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="GPA" Type="decimal" Precision="18" Scale="2" />
     <Property Name="Graduated" Type="char" MaxLength="1" Nullable="false" />
-    <Property Name="Graduated_Date" Type="date" />
+    <Property Name="Graduation_Date" Type="date" />
+    <Property Name="Degree" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="PROJECT_LINKS">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProjectId" Type="int" Nullable="false" />
+    <Property Name="Url" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="Website" Type="varchar" MaxLength="30" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PROJECTS">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="1000" />
+    <Property Name="Description" Type="varchar" MaxLength="1000" />
   </EntityType>
   <EntityType Name="SCHOOL">
     <Key>
@@ -90,6 +108,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_LINKS">
+    <End Role="PROJECTS" Type="Self.PROJECTS" Multiplicity="1" />
+    <End Role="PROJECT_LINKS" Type="Self.PROJECT_LINKS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PROJECTS">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PROJECT_LINKS">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_School">
     <End Role="SCHOOL" Type="Self.SCHOOL" Multiplicity="1" />
     <End Role="MAJOR" Type="Self.MAJOR" Multiplicity="*" />
@@ -108,6 +138,8 @@
     <EntitySet Name="JOB_DATES" EntityType="Self.JOB_DATES" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="JOB_DESC" EntityType="Self.JOB_DESC" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MAJOR" EntityType="Self.MAJOR" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PROJECT_LINKS" EntityType="Self.PROJECT_LINKS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PROJECTS" EntityType="Self.PROJECTS" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SCHOOL" EntityType="Self.SCHOOL" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_CompanyIdJob" Association="Self.FK_CompanyIdJob">
       <End Role="COMPANY" EntitySet="COMPANY" />
@@ -120,6 +152,10 @@
     <AssociationSet Name="FK_JobIdDesc" Association="Self.FK_JobIdDesc">
       <End Role="JOB" EntitySet="JOB" />
       <End Role="JOB_DESC" EntitySet="JOB_DESC" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LINKS" Association="Self.FK_LINKS">
+      <End Role="PROJECTS" EntitySet="PROJECTS" />
+      <End Role="PROJECT_LINKS" EntitySet="PROJECT_LINKS" />
     </AssociationSet>
     <AssociationSet Name="FK_School" Association="Self.FK_School">
       <End Role="SCHOOL" EntitySet="SCHOOL" />

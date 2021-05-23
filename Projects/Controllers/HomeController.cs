@@ -11,12 +11,37 @@ namespace Projects.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// Gets the information for each project from the database and creates the model objects to use on the View.  If no data exists gives an error to the user.
+        /// </summary>
+        /// <returns>The view containing the information on the projects or an error if no information is retreived from the database.</returns>
         public ActionResult Index()
         {
-            ViewBag.Message = "Coming soon";
-            return View();
+            try
+            {
+                var table = Models.DatabaseAccessModel.GetTable("projects");
+                if(table == null || table.Rows.Count <= 0)
+                {
+                    throw new Exception("no_data_projects");
+                }
+                var projects = new List<Models.ProjectModel>();
+                var names = table.AsEnumerable().Select(x => x.Field<string>("Name")).Distinct();
+                foreach (var name in names)
+                {
+                    projects.Add(new Models.ProjectModel(table.AsEnumerable().Select(x => x).Where(x => x.Field<string>("Name") == name)));
+                }//end foreach
+                ViewBag.Message = "Coming soon";
+                return View(projects);
+            } catch (Exception ex)
+            {
+                return View("Error");
+            }//end try-catch
         }//end Index
 
+        /// <summary>
+        /// Gets the information for education and work history from the database and creates the model objects to use on the View.  If no data exists gives an error to the user.
+        /// </summary>
+        /// <returns>View containing the education and work history or an error page</returns>
         public ActionResult Resume()
         {
             try

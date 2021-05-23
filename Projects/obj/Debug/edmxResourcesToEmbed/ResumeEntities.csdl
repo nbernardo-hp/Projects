@@ -47,10 +47,11 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="SchoolId" Type="Int32" Nullable="false" />
     <Property Name="Major1" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="GPA" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="GPA" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="Graduated" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-    <Property Name="Graduated_Date" Type="DateTime" Precision="0" />
     <NavigationProperty Name="SCHOOL" Relationship="Self.FK_School" FromRole="MAJOR" ToRole="SCHOOL" />
+    <Property Name="Graduation_Date" Type="DateTime" Precision="0" />
+    <Property Name="Degree" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="SCHOOL">
     <Key>
@@ -133,5 +134,42 @@
       <End Role="SCHOOL" EntitySet="SCHOOLs" />
       <End Role="MAJOR" EntitySet="MAJORs" />
     </AssociationSet>
+    <EntitySet Name="PROJECT_LINKS" EntityType="PortfolioModel.PROJECT_LINKS" />
+    <EntitySet Name="PROJECTS" EntityType="PortfolioModel.PROJECT" />
+    <AssociationSet Name="FK_LINKS" Association="PortfolioModel.FK_LINKS">
+      <End Role="PROJECT" EntitySet="PROJECTS" />
+      <End Role="PROJECT_LINKS" EntitySet="PROJECT_LINKS" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="PROJECT_LINKS">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectId" Type="Int32" Nullable="false" />
+    <Property Name="Url" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Website" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PROJECT" Relationship="PortfolioModel.FK_LINKS" FromRole="PROJECT_LINKS" ToRole="PROJECT" />
+  </EntityType>
+  <EntityType Name="PROJECT">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PROJECT_LINKS" Relationship="PortfolioModel.FK_LINKS" FromRole="PROJECT" ToRole="PROJECT_LINKS" />
+  </EntityType>
+  <Association Name="FK_LINKS">
+    <End Type="PortfolioModel.PROJECT" Role="PROJECT" Multiplicity="1" />
+    <End Type="PortfolioModel.PROJECT_LINKS" Role="PROJECT_LINKS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PROJECT">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PROJECT_LINKS">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

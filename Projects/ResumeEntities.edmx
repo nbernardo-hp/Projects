@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PortfolioModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="PortfolioModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="COMPANY">
           <Key>
             <PropertyRef Name="Id" />
@@ -46,9 +46,27 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SchoolId" Type="int" Nullable="false" />
           <Property Name="Major" Type="varchar" MaxLength="150" Nullable="false" />
-          <Property Name="GPA" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="GPA" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Graduated" Type="char" MaxLength="1" Nullable="false" />
-          <Property Name="Graduated_Date" Type="date" />
+          <Property Name="Graduation_Date" Type="date" />
+          <Property Name="Degree" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PROJECT_LINKS">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProjectId" Type="int" Nullable="false" />
+          <Property Name="Url" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Website" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PROJECTS">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="1000" />
+          <Property Name="Description" Type="varchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="SCHOOL">
           <Key>
@@ -95,6 +113,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_LINKS">
+          <End Role="PROJECTS" Type="Self.PROJECTS" Multiplicity="1" />
+          <End Role="PROJECT_LINKS" Type="Self.PROJECT_LINKS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROJECTS">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PROJECT_LINKS">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_School">
           <End Role="SCHOOL" Type="Self.SCHOOL" Multiplicity="1" />
           <End Role="MAJOR" Type="Self.MAJOR" Multiplicity="*" />
@@ -113,6 +143,8 @@
           <EntitySet Name="JOB_DATES" EntityType="Self.JOB_DATES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JOB_DESC" EntityType="Self.JOB_DESC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MAJOR" EntityType="Self.MAJOR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PROJECT_LINKS" EntityType="Self.PROJECT_LINKS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PROJECTS" EntityType="Self.PROJECTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SCHOOL" EntityType="Self.SCHOOL" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_CompanyIdJob" Association="Self.FK_CompanyIdJob">
             <End Role="COMPANY" EntitySet="COMPANY" />
@@ -126,13 +158,16 @@
             <End Role="JOB" EntitySet="JOB" />
             <End Role="JOB_DESC" EntitySet="JOB_DESC" />
           </AssociationSet>
+          <AssociationSet Name="FK_LINKS" Association="Self.FK_LINKS">
+            <End Role="PROJECTS" EntitySet="PROJECTS" />
+            <End Role="PROJECT_LINKS" EntitySet="PROJECT_LINKS" />
+          </AssociationSet>
           <AssociationSet Name="FK_School" Association="Self.FK_School">
             <End Role="SCHOOL" EntitySet="SCHOOL" />
             <End Role="MAJOR" EntitySet="MAJOR" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PortfolioModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -183,10 +218,11 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SchoolId" Type="Int32" Nullable="false" />
           <Property Name="Major1" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="GPA" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="GPA" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Graduated" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="Graduated_Date" Type="DateTime" Precision="0" />
           <NavigationProperty Name="SCHOOL" Relationship="Self.FK_School" FromRole="MAJOR" ToRole="SCHOOL" />
+          <Property Name="Graduation_Date" Type="DateTime" Precision="0" />
+          <Property Name="Degree" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SCHOOL">
           <Key>
@@ -269,7 +305,44 @@
             <End Role="SCHOOL" EntitySet="SCHOOLs" />
             <End Role="MAJOR" EntitySet="MAJORs" />
           </AssociationSet>
+          <EntitySet Name="PROJECT_LINKS" EntityType="PortfolioModel.PROJECT_LINKS" />
+          <EntitySet Name="PROJECTS" EntityType="PortfolioModel.PROJECT" />
+          <AssociationSet Name="FK_LINKS" Association="PortfolioModel.FK_LINKS">
+            <End Role="PROJECT" EntitySet="PROJECTS" />
+            <End Role="PROJECT_LINKS" EntitySet="PROJECT_LINKS" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="PROJECT_LINKS">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectId" Type="Int32" Nullable="false" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Website" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PROJECT" Relationship="PortfolioModel.FK_LINKS" FromRole="PROJECT_LINKS" ToRole="PROJECT" />
+        </EntityType>
+        <EntityType Name="PROJECT">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PROJECT_LINKS" Relationship="PortfolioModel.FK_LINKS" FromRole="PROJECT" ToRole="PROJECT_LINKS" />
+        </EntityType>
+        <Association Name="FK_LINKS">
+          <End Type="PortfolioModel.PROJECT" Role="PROJECT" Multiplicity="1" />
+          <End Type="PortfolioModel.PROJECT_LINKS" Role="PROJECT_LINKS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROJECT">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PROJECT_LINKS">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -317,12 +390,13 @@
           <EntitySetMapping Name="MAJORs">
             <EntityTypeMapping TypeName="PortfolioModel.MAJOR">
               <MappingFragment StoreEntitySet="MAJOR">
+                <ScalarProperty Name="Degree" ColumnName="Degree" />
+                <ScalarProperty Name="Graduation_Date" ColumnName="Graduation_Date" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="SchoolId" ColumnName="SchoolId" />
                 <ScalarProperty Name="Major1" ColumnName="Major" />
                 <ScalarProperty Name="GPA" ColumnName="GPA" />
                 <ScalarProperty Name="Graduated" ColumnName="Graduated" />
-                <ScalarProperty Name="Graduated_Date" ColumnName="Graduated_Date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -333,6 +407,25 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="City" ColumnName="City" />
                 <ScalarProperty Name="State" ColumnName="State" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PROJECT_LINKS">
+            <EntityTypeMapping TypeName="PortfolioModel.PROJECT_LINKS">
+              <MappingFragment StoreEntitySet="PROJECT_LINKS">
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PROJECTS">
+            <EntityTypeMapping TypeName="PortfolioModel.PROJECT">
+              <MappingFragment StoreEntitySet="PROJECTS">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

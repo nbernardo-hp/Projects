@@ -14,8 +14,11 @@ namespace Projects.Models
         {
             try
             {
+                table = table.ToLower();
                 string entity;
-                if(table[0] == 'w' || table[0] == 'e')
+                /*Determine which type of ADO.Net entity to set the variable going to the connection string from based on what the argument passed is.  Checks the first letter and then if the argument
+                 contains a specific word.*/
+                if (table[0] == 'w' || table[0] == 'e')
                 {
                     entity = "PortfolioEntities";
                     if (table.Contains("work") || table == "w")
@@ -23,13 +26,23 @@ namespace Projects.Models
                         cmdText = "SELECT C.Id AS Company_Id, C.Name, C.City, C.State, J.Id AS Job_Id, J.Title, JD.Id, JD.StartDate, JD.EndDate, JDESC.Description " +
                                                 "FROM COMPANY C, JOB J, JOB_DATES JD, JOB_DESC JDESC WHERE C.Id = J.CompanyId AND J.Id = JD.JobId AND JDESC.JobId = J.Id " +
                                                 "ORDER BY ISNULL(EndDate, GETDATE()) DESC";
-                    } else if(table.Contains("edu") || table == "e")
+                    } else if (table.Contains("edu") || table == "e")
                     {
                         cmdText = "SELECT M.Id, S.Name, S.City, S.State, M.Major, M.GPA, M.Graduated, M.Graduation_Date, M.Degree FROM MAJOR M, SCHOOL S WHERE S.Id = M.SchoolId";
                     } else
                     {
                         throw new Exception("no_table");
                     }//end nested if-else if-else
+                } else if (table[0] == 'p')
+                {
+                    if(table.Contains("proj"))
+                    {
+                        entity = "PortfolioEntities";
+                        cmdText = "SELECT P.Id, P.Name, P.Description, L.Url, L.Website FROM PROJECTS P, PROJECT_LINKS L WHERE P.Id = L.ProjectId";
+                    } else
+                    {
+                        throw new Exception("no_table");
+                    }
                 } else
                 {
                     throw new Exception("no_table");

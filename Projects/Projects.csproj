@@ -150,6 +150,13 @@
     <Compile Include="Models\DatabaseAccessModel.cs" />
     <Compile Include="Models\EducationModel.cs" />
     <Compile Include="Models\JobModel.cs" />
+    <Compile Include="Models\ProjectModel.cs" />
+    <Compile Include="PROJECT.cs">
+      <DependentUpon>ResumeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PROJECT_LINKS.cs">
+      <DependentUpon>ResumeEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResumeEntities.Context.cs">
       <AutoGen>True</AutoGen>
