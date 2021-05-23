@@ -25,6 +25,10 @@ namespace Projects.Controllers
                 var education = new List<Models.EducationModel>();
                 var workHistoryData = Models.DatabaseAccessModel.GetTable("workhistory");
                 var educationData = Models.DatabaseAccessModel.GetTable("education");
+                if(workHistoryData == null || educationData == null)
+                {
+                    throw new Exception(String.Format("no_data_{0}",(workHistoryData == null ? "work" : "education")));
+                }
                 var jobs = workHistoryData.AsEnumerable().Select(x => x.Field<int>("Job_Id")).Distinct();
                 int jobCount = jobs.Count();
                 for (int i = 0; i < jobCount; i++)
