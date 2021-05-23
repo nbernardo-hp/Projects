@@ -18,4 +18,6 @@ INSERT INTO PROJECTS (Name, Description) VALUES ('ASP.Net MVC Resume', 'Resume a
 
 INSERT INTO PROJECT_LINKS (ProjectId, Url, Website) VALUES ((SELECT Id FROM PROJECTS WHERE Name = 'Top Down Analysis'), 'https://github.com/nbernardo-hp/Top-Down-Analysis', 'GitHub');
 INSERT INTO PROJECT_LINKS (ProjectId, Url, Website) VALUES ((SELECT Id FROM PROJECTS WHERE Name = 'Stock Screener'), 'https://github.com/nbernardo-hp/Screener', 'GitHub');
-INSERT INTO PROJECT_LINKS (ProjectId, Url, Website) VALUES ((SELECT Id FROM PROJECTS WHERE Name = 'ASP.Net MVC Resume'), 'https://github.com/nbernardo-hp/Portfolio/tree/main/Portfolio/Portfolio', 'GitHub');
+INSERT INTO PROJECT_LINKS (ProjectId, Url, Website) VALUES ((SELECT Id FROM PROJECTS WHERE Name = 'ASP.Net MVC Resume'), 'https://github.com/nbernardo-hp/Projects/tree/master/Projects', 'GitHub');
+INSERT INTO PROJECT_LINKS (ProjectId, Url, Website) VALUES ((SELECT Id FROM PROJECTS WHERE Name = 'ASP.Net MVC Resume'), '/Home/Resume', 'ASP.Net MVC');
+INSERT INTO PROJECT_LINKS (ProjectId, Url, Website) VALUES ((SELECT Id FROM PROJECTS WHERE Name = 'Top Down Analysis'), '/Stocks/TopDownAnalysis', 'ASP.Net MVC');

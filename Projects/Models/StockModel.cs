@@ -24,7 +24,7 @@ namespace Projects.Models
         public char TypeValue
         {
             get { return type; }
-            set { type = value; }
+            set { type = Char.ToLower(value); }
         }
 
         public string NameValue
@@ -84,10 +84,26 @@ namespace Projects.Models
                 }
             }
         }
+
+        /// <summary>
+        /// Calculates and sets the individual rating of the stock based on the scores of each attribute
+        /// </summary>
         public void CalculateIndividualRating()
         {
-            
-        }
+            /*Adds the values saved in the preferences for the stock attribute values.  If the stock is a sector stock add
+             *the finviz rank value.  Divide the rating by a specific value based on the score of unexpected items and
+             *if it is a market or sector*/
+            individualRating = (Models.PreferencesModel.GetScore("sma200", sma200) + Models.PreferencesModel.GetScore("sma50", sma50) + Models.PreferencesModel.GetScore("sma20", sma20)) / 3;
+            individualRating += Models.PreferencesModel.GetScore("chartPattern", chartPattern) + Models.PreferencesModel.GetScore("unexpectedItems", unexpectedItems);
+            if(Models.PreferencesModel.GetScore("unexpectedItems", unexpectedItems) > 0)
+            {
+                individualRating /= (type == 'm' ? 3 : 4);
+            } else
+            {
+                individualRating /= (type == 'm' ? 2 : 3);
+            }//end if-else
+            individualRating = Math.Round(individualRating, 1);
+        }//end CalculateIndividualRating
 
         private char type;
         private string name;
